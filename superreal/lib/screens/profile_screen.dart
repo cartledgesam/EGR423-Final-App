@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
+  static const routeName = '/proifile-screen';
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
