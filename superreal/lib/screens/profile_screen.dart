@@ -13,7 +13,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   var _pickedImage;
 
-  Future<void> _pickImage() async {
+  // called when user chooses to take picture from their camera
+  Future<void> _displayCamera() async {
     final picker = ImagePicker();
     final pickedImageFile = await picker.pickImage(
       source: ImageSource.camera,
@@ -24,6 +25,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _pickedImage = File(pickedImageFile.path);
     });
+    _pop(context);
+  }
+
+  // called when user decides to choose image from gallery
+  Future<void> _showPhotoGallery() async {
+    final picker = ImagePicker();
+    final pickedImageFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedImageFile == null) {
+      return;
+    }
+    setState(() {
+      _pickedImage = File(pickedImageFile.path);
+    });
+    _pop(context);
+  }
+
+  void _pop(BuildContext context) {
+    Navigator.pop(context);
+  }
+
+  void _showImagePrompt(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Column(
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(Icons.camera_alt_rounded),
+            title: const Text('Take Picture with Camera'),
+            onTap: _displayCamera,
+          ),
+          ListTile(
+            leading: const Icon(Icons.image),
+            title: const Text('Choose Image from Camera Roll'),
+            onTap: _showPhotoGallery,
+          ),
+          // show delete icon if image is not null
+          if (_pickedImage != null)
+            ListTile(
+              leading: Icon(Icons.delete),
+              title: const Text('Delete Photo'),
+              onTap: () => setState(() {
+                _pickedImage = null;
+                _pop(context);
+              }),
+            ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -57,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Center(
             child: GestureDetector(
               // make it so that we can remove pics too
-              onTap: _pickImage,
+              onTap: () => _showImagePrompt(context),
               child: CircleAvatar(
                 backgroundImage:
                     _pickedImage != null ? FileImage(_pickedImage) : null,
