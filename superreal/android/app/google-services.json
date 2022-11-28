@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "460375446905",
+    "project_id": "superreal-30022",
+    "storage_bucket": "superreal-30022.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460375446905:android:58d5eebfcfa6a2e8c8cba8",
+        "android_client_info": {
+          "package_name": "com.example.superreal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460375446905-42q009nr9cl1pgs8nv0rjiofq2kjb5co.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjbIhAuvBR0YXspTWy6UKeYgEtlNR7ezQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460375446905-42q009nr9cl1pgs8nv0rjiofq2kjb5co.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

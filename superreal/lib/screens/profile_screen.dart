@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/proifile-screen';
@@ -16,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // called when user chooses to take picture from their camera
   Future<void> _displayCamera() async {
     final picker = ImagePicker();
-    final pickedImageFile = await picker.pickImage(
+    final pickedImageFile = await ImagePicker.pickImage(
       source: ImageSource.camera,
     );
     if (pickedImageFile == null) {
@@ -31,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // called when user decides to choose image from gallery
   Future<void> _showPhotoGallery() async {
     final picker = ImagePicker();
-    final pickedImageFile = await picker.pickImage(
+    final pickedImageFile = await ImagePicker.pickImage(
       source: ImageSource.gallery,
     );
     if (pickedImageFile == null) {
@@ -89,13 +90,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Colors.white,
           ),
         ),
-        actions: const <Widget>[
-          IconButton(
-            onPressed: null,
+        actions: <Widget>[
+          DropdownButton(
+            underline: const SizedBox(),
             icon: Icon(
               Icons.more_horiz,
-              color: Colors.white,
+              color: Theme.of(context).primaryIconTheme.color,
             ),
+            items: [
+              DropdownMenuItem(
+                value: 'logout',
+                child: Container(
+                  child: Row(
+                    children: const <Widget>[
+                      Icon(Icons.exit_to_app),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text('Logout'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+            onChanged: (itemIdentifier) {
+              if (itemIdentifier == 'logout') {
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context).pop();
+              }
+            },
           ),
         ],
       ),
