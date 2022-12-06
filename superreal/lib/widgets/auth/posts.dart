@@ -24,16 +24,16 @@ class Posts extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          final chatDocs = postSnapshot.data.docs;
+          final postDocs = postSnapshot.data.docs;
           return ListView.builder(
             reverse: true,
-            itemCount: chatDocs.length,
+            itemCount: postDocs.length,
             itemBuilder: (ctx, index) => Post(
-              chatDocs[index]['description'],
-              chatDocs[index]['userId'],
-              chatDocs[index].documentID,
+              postDocs[index]['description'],
+              postDocs[index]['userId'],
+              postDocs[index].documentID,
               //chatDocs[index]['userId'] == futureSnapshot.data.uid,
-              key: ValueKey(chatDocs[index].documentID),
+              key: ValueKey(postDocs[index].documentID),
             ),
           );
         });
