@@ -40,73 +40,73 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       drawer: Drawer(), // add your own drawer
       body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              Posts(),
-              // CircleAvatar(
-              //   backgroundColor: Colors.white,
-              //   radius: 100,
-              //   child: Text(
-              //     'Friend Post!',
-              //     style: TextStyle(
-              //       color: Colors.black,
-              //       fontSize: 28,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-              // CircleAvatar(
-              //   backgroundColor: Colors.white,
-              //   radius: 100,
-              //   child: Text(
-              //     'Friend Post!',
-              //     style: TextStyle(
-              //       color: Colors.black,
-              //       fontSize: 28,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-              // CircleAvatar(
-              //   backgroundColor: Colors.white,
-              //   radius: 100,
-              //   child: Text(
-              //     'Friend Post!',
-              //     style: TextStyle(
-              //       color: Colors.black,
-              //       fontSize: 28,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-              // CircleAvatar(
-              //   backgroundColor: Colors.white,
-              //   radius: 100,
-              //   child: Text(
-              //     'Friend Post!',
-              //     style: TextStyle(
-              //       color: Colors.black,
-              //       fontSize: 28,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-              // CircleAvatar(
-              //   backgroundColor: Colors.white,
-              //   radius: 100,
-              //   child: Text(
-              //     'Friend Post!',
-              //     style: TextStyle(
-              //       color: Colors.black,
-              //       fontSize: 28,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
-        ),
+        // child: Center(
+        //   child: Column(
+        //     children: <Widget>[
+        child: Posts(),
+        // CircleAvatar(
+        //   backgroundColor: Colors.white,
+        //   radius: 100,
+        //   child: Text(
+        //     'Friend Post!',
+        //     style: TextStyle(
+        //       color: Colors.black,
+        //       fontSize: 28,
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //   ),
+        // ),
+        // CircleAvatar(
+        //   backgroundColor: Colors.white,
+        //   radius: 100,
+        //   child: Text(
+        //     'Friend Post!',
+        //     style: TextStyle(
+        //       color: Colors.black,
+        //       fontSize: 28,
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //   ),
+        // ),
+        // CircleAvatar(
+        //   backgroundColor: Colors.white,
+        //   radius: 100,
+        //   child: Text(
+        //     'Friend Post!',
+        //     style: TextStyle(
+        //       color: Colors.black,
+        //       fontSize: 28,
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //   ),
+        // ),
+        // CircleAvatar(
+        //   backgroundColor: Colors.white,
+        //   radius: 100,
+        //   child: Text(
+        //     'Friend Post!',
+        //     style: TextStyle(
+        //       color: Colors.black,
+        //       fontSize: 28,
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //   ),
+        // ),
+        // CircleAvatar(
+        //   backgroundColor: Colors.white,
+        //   radius: 100,
+        //   child: Text(
+        //     'Friend Post!',
+        //     style: TextStyle(
+        //       color: Colors.black,
+        //       fontSize: 28,
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //   ),
+        // ),
+        //],
+        //),
+        //),
       ),
     );
   }
