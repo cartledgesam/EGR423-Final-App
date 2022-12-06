@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/proifile-screen';
@@ -13,11 +16,36 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   var _pickedImage;
+  NetworkImage _loadImage;
+  final _user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPhoto();
+  }
+
+  Future<void> _loadPhoto() async {
+    // every time this class is initialized it needs to check
+    // the database to see if this uer has an image...
+    final user = FirebaseAuth.instance.currentUser;
+    final userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    if (userData['image_url'] != null) {
+      setState(() {
+        _loadImage = NetworkImage(userData['image_url']);
+      });
+    }
+  }
 
   // called when user chooses to take picture from their camera
   Future<void> _displayCamera() async {
+    final user = await FirebaseAuth.instance.currentUser;
     final picker = ImagePicker();
-    final pickedImageFile = await ImagePicker.pickImage(
+    final pickedImageFile = await picker.getImage(
       source: ImageSource.camera,
     );
     if (pickedImageFile == null) {
@@ -27,10 +55,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _pickedImage = File(pickedImageFile.path);
     });
     _pop(context);
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('user_image')
+        .child(user.uid + '.jpg');
+
+    await ref.putFile(_pickedImage);
+
+    final url = await ref.getDownloadURL();
+
+    final userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
+      {
+        'username': userData['username'],
+        'email': userData['email'],
+        'image_url': url,
+      },
+    );
   }
 
   // called when user decides to choose image from gallery
   Future<void> _showPhotoGallery() async {
+    final user = await FirebaseAuth.instance.currentUser;
     final picker = ImagePicker();
     final pickedImageFile = await ImagePicker.pickImage(
       source: ImageSource.gallery,
@@ -42,6 +92,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _pickedImage = File(pickedImageFile.path);
     });
     _pop(context);
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('user_image')
+        .child(user.uid + '.jpg');
+
+    await ref.putFile(_pickedImage);
+
+    final url = await ref.getDownloadURL();
+
+    final userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
+      {
+        'username': userData['username'],
+        'email': userData['email'],
+        'image_url': url,
+      },
+    );
   }
 
   void _pop(BuildContext context) {
@@ -50,30 +121,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _showImagePrompt(BuildContext context) {
     showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(15),
+        ),
+      ),
       context: context,
-      builder: (context) => Column(
-        children: <Widget>[
-          ListTile(
-            leading: const Icon(Icons.camera_alt_rounded),
-            title: const Text('Take Picture with Camera'),
-            onTap: _displayCamera,
-          ),
-          ListTile(
-            leading: const Icon(Icons.image),
-            title: const Text('Choose Image from Camera Roll'),
-            onTap: _showPhotoGallery,
-          ),
-          // show delete icon if image is not null
-          if (_pickedImage != null)
+      builder: (context) => SizedBox(
+        height: MediaQuery.of(context).size.height / 4,
+        child: Column(
+          children: <Widget>[
             ListTile(
-              leading: Icon(Icons.delete),
-              title: const Text('Delete Photo'),
-              onTap: () => setState(() {
-                _pickedImage = null;
-                _pop(context);
-              }),
+              leading: const Icon(Icons.camera_alt_rounded),
+              title: const Text('Take Picture with Camera'),
+              onTap: _displayCamera,
             ),
-        ],
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Choose Image from Camera Roll'),
+              onTap: _showPhotoGallery,
+            ),
+            // show delete icon if image is not null
+            if (_pickedImage != null || _loadImage != null)
+              ListTile(
+                leading: Icon(Icons.delete),
+                title: const Text('Delete Photo'),
+                onTap: () => setState(() {
+                  _pickedImage = null;
+                  _loadImage = null;
+                  // removes image from database
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(_user.uid)
+                      .update(
+                    {
+                      'image_url': FieldValue.delete(),
+                    },
+                  );
+                  _pop(context);
+                }),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -116,7 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onChanged: (itemIdentifier) {
               if (itemIdentifier == 'logout') {
                 FirebaseAuth.instance.signOut();
-                Navigator.of(context).pop();
+                Navigator.of(context).popUntil((route) => route.isFirst);
               }
             },
           ),
@@ -133,11 +222,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // make it so that we can remove pics too
               onTap: () => _showImagePrompt(context),
               child: CircleAvatar(
-                backgroundImage:
-                    _pickedImage != null ? FileImage(_pickedImage) : null,
+                backgroundImage: _loadImage ??
+                    (_pickedImage != null ? FileImage(_pickedImage) : null),
                 backgroundColor: Colors.grey,
                 radius: 75,
-                child: _pickedImage == null
+                child: _pickedImage == null &&
+                        _loadImage ==
+                            null // use progress indicator if pic is loading
                     ? const Icon(
                         Icons.camera_alt_rounded,
                         size: 50,

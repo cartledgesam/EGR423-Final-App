@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.of(context).pushNamed(ProfileScreen.routeName);
             },
             child: const CircleAvatar(
-              // user provider/listeners to update the picture to this avatar
+              // make this avatar listen to the database
               backgroundColor: Colors.white,
               child: Icon(
                 Icons.person,

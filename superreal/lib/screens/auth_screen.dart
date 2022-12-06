@@ -43,25 +43,15 @@ class _AuthScreenState extends State<AuthScreen> {
           password: password,
         );
 
-        // final ref = FirebaseStorage.instance
-        //     .ref()
-        //     .child('user_image')
-        //     .child(authResult.user.uid + '.jpg');
-
-        // await ref.putFile(image);
-
-        // final url = await ref.getDownloadURL();
-
         await FirebaseFirestore.instance
             .collection('users')
             .doc(authResult.user.uid)
-            .set({
-          'username': username,
-          'email': email,
-        }
-                //   'image_url': url,
-                // },
-                );
+            .set(
+          {
+            'username': username,
+            'email': email,
+          },
+        );
       }
     } catch (err) {
       var message = 'An error occured, please check your credentials!';
@@ -75,7 +65,6 @@ class _AuthScreenState extends State<AuthScreen> {
           backgroundColor: Theme.of(ctx).errorColor,
         ),
       );
-      // var question = 'Are you a student or a professional?'
 
       setState(() {
         _isLoading = false;
@@ -88,26 +77,25 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 4 + 50,
-          ),
-          Center(
-            child: Text(
-              'SuperReal.',
-              style: TextStyle(color: Colors.white, fontSize: 48),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 4 + 50,
             ),
-          ),
-          // SizedBox(
-          //   height: MediaQuery.of(context).size.height,
-          // ),
-          AuthForm(
-            _submitAuthForm,
-            _isLoading,
-          ),
-        ],
+            const Center(
+              child: Text(
+                'SuperReal.',
+                style: TextStyle(color: Colors.white, fontSize: 48),
+              ),
+            ),
+            AuthForm(
+              _submitAuthForm,
+              _isLoading,
+            ),
+          ],
+        ),
       ),
     );
   }
