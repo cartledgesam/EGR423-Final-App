@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './profile_screen.dart';
+import '../widgets/auth/posts.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -41,7 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: const <Widget>[
+            children: <Widget>[
+              Posts(),
               CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 100,
