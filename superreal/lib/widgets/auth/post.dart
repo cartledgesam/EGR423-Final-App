@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post extends StatelessWidget {
-  Post(this.description, this.userId, this.documentId, {this.key});
+  Post(this.description, this.username, this.imageURL, this.userId, {this.key});
+//this.documentId
 
   final Key key;
+  final String username;
+  final String imageURL;
   final String description;
   final String userId;
-  final String documentId;
+  // final String documentId;
   //final bool isMe;
 
   @override
@@ -33,32 +36,31 @@ class Post extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                FutureBuilder(
-                  future: FirebaseFirestore.instance
-                      .collection('posts')
-                      .doc(documentId)
-                      .get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Text('Loading...');
-                    }
-                    return Text(
-                      snapshot.data['userId'],
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context)
-                              .accentTextTheme
-                              .headline6
-                              .color),
-                    );
-                  },
-                ),
+                // FutureBuilder(
+                //   future: FirebaseFirestore.instance
+                //       .collection('posts')
+                //       .doc(userId)
+                //       .get(),
+                //   builder: (context, snapshot) {
+                //     print(snapshot.data['userId']);
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       print("waiting");
+                //       return const Text('Loading...');
+                //     }
+                //     return Text(
+                //       snapshot.data['description'],
+                //       //description,
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.bold, color: Colors.white),
+                //     );
+                //   },
+                // ),
                 Text(
                   description,
                   style: TextStyle(
-                    color: Theme.of(context).accentTextTheme.headline6.color,
+                    color: Colors.white,
                   ),
-                  textAlign: TextAlign.start,
+                  //textAlign: TextAlign.start,
                 ),
               ],
             ),

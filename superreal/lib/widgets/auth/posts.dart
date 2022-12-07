@@ -9,31 +9,36 @@ class Posts extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     debugPrint(user.toString());
-
+    final uid = user.uid;
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')
-            .orderBy(
-              'createdAt',
-              descending: true,
-            )
+            // .orderBy(
+            //   'createdAt',
+            //   descending: true,
+            // )
             .snapshots(),
         builder: (ctx, postSnapshot) {
-          if (postSnapshot.connectionState == ConnectionState.waiting) {
+          debugPrint(postSnapshot.connectionState.toString());
+          if (postSnapshot.connectionState == ConnectionState.waiting ||
+              !postSnapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
           final postDocs = postSnapshot.data.docs;
+          debugPrint(postSnapshot.data.docs.length.toString());
           return ListView.builder(
             reverse: true,
             itemCount: postDocs.length,
             itemBuilder: (ctx, index) => Post(
               postDocs[index]['description'],
+              postDocs[index]['username'],
+              postDocs[index]['imageURL'],
               postDocs[index]['userId'],
-              postDocs[index].documentID,
+              //postDocs[index].documentID,
               //chatDocs[index]['userId'] == futureSnapshot.data.uid,
-              key: ValueKey(postDocs[index].documentID),
+              //key: ValueKey(postDocs[index].documentID),
             ),
           );
         });
