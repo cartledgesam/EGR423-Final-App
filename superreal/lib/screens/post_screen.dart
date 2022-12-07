@@ -87,9 +87,6 @@ class _PostScreenState extends State<PostScreen> {
               title: const Text('Take Picture with Camera'),
               onTap: _displayCamera,
             ),
-
-            // show delete icon if image is not null
-            //if (_pickedImage != null || _loadImage != null)
           ],
         ),
       ),
@@ -159,7 +156,6 @@ class _PostScreenState extends State<PostScreen> {
           ),
           Center(
             child: GestureDetector(
-              // make it so that we can remove pics too
               onTap: () => _showImagePrompt(context),
               child: CircleAvatar(
                   backgroundColor: Colors.grey,
