@@ -29,7 +29,7 @@ class Posts extends StatelessWidget {
           final postDocs = postSnapshot.data.docs;
           debugPrint(postSnapshot.data.docs.length.toString());
           return ListView.builder(
-            reverse: true,
+            reverse: false,
             itemCount: postDocs.length,
             itemBuilder: (ctx, index) => Post(
               postDocs[index]['description'],
