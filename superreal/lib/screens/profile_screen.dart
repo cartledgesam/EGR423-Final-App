@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+
+import './home_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/proifile-screen';
@@ -43,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // called when user chooses to take picture from their camera
   Future<void> _displayCamera() async {
-    final user = await FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     final picker = ImagePicker();
     final pickedImageFile = await picker.getImage(
       source: ImageSource.camera,
@@ -74,13 +76,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         'username': userData['username'],
         'email': userData['email'],
         'image_url': url,
+        'userId': user.uid,
       },
     );
   }
 
   // called when user decides to choose image from gallery
   Future<void> _showPhotoGallery() async {
-    final user = await FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     final picker = ImagePicker();
     final pickedImageFile = await ImagePicker.pickImage(
       source: ImageSource.gallery,
@@ -111,6 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         'username': userData['username'],
         'email': userData['email'],
         'image_url': url,
+        'userId': user.uid,
       },
     );
   }
@@ -155,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       .doc(_user.uid)
                       .update(
                     {
-                      'image_url': FieldValue.delete(),
+                      'image_url': null, // FieldValue.delete(),
                     },
                   );
                   _pop(context);
