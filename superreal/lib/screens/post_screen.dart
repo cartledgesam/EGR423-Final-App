@@ -56,7 +56,7 @@ class _PostScreenState extends State<PostScreen> {
     var myData = {
       'imageURL': url,
       'username': "test",
-      'userId': "1234",
+      'userId': user.uid,
       'description': "test"
     };
     await FirebaseFirestore.instance.collection('posts').add(myData);
