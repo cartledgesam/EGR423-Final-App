@@ -39,7 +39,11 @@ class _UserTileState extends State<UserTile> {
             style: TextStyle(color: Colors.white),
           ),
           trailing: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                widget.isFriend = !widget.isFriend;
+              });
+            },
             icon: Icon(widget.isFriend ? Icons.check : Icons.add),
             color: Colors.white,
           ),
