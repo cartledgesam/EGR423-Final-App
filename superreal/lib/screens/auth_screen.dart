@@ -50,6 +50,8 @@ class _AuthScreenState extends State<AuthScreen> {
           {
             'username': username,
             'email': email,
+            'image_url': null,
+            'userId': authResult.user.uid,
           },
         );
       }
