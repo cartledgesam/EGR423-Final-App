@@ -71,7 +71,47 @@ class _PostScreenState extends State<PostScreen> {
       'imageURL': url2,
       'username': "test",
       'userId': user.uid,
-      'description': "test"
+      'description': "test",
+    };
+    await FirebaseFirestore.instance.collection('posts').add(myData);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
+  }
+
+  Future<void> _displayGallery() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    final picker = ImagePicker();
+    final pickedImageFile = await picker.getImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedImageFile == null) {
+      return;
+    }
+    setState(() {
+      _pickedImage = File(pickedImageFile.path);
+    });
+    _pop(context);
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('user_image')
+        .child(user.uid + '.jpg');
+
+    await ref.putFile(_pickedImage);
+
+    final url = await ref.getDownloadURL();
+
+    final userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    var myData = {
+      'imageURL': url,
+      'username': userData['username'],
+      'userId': user.uid,
+      'description': "test",
     };
     await FirebaseFirestore.instance.collection('posts').add(myData);
     Navigator.push(
@@ -100,6 +140,11 @@ class _PostScreenState extends State<PostScreen> {
               leading: const Icon(Icons.camera_alt_rounded),
               title: const Text('Take Picture with Camera'),
               onTap: _displayCamera,
+            ),
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Upload from Camera Roll'),
+              onTap: _displayGallery,
             ),
           ],
         ),
@@ -158,7 +203,7 @@ class _PostScreenState extends State<PostScreen> {
             height: 270,
           ),
           const Text(
-            'Post a picture to see what your friends posted!',
+            'Today\'s Task: Post a Picture with Your Friends!',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 25,
