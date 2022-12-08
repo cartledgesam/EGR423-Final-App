@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import './screens/profile_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/auth_screen.dart';
+import './screens/post_screen.dart';
 import './screens/home_screen.dart';
 
 void main() {
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
                     builder: (ctx, userSnapshot) {
                       // checks if we are logged in, then show the Chat Screen
                       if (userSnapshot.hasData) {
-                        return HomeScreen();
+                        return PostScreen();
                       }
                       return const AuthScreen();
                     },
