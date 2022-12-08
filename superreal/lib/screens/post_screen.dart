@@ -39,6 +39,20 @@ class _PostScreenState extends State<PostScreen> {
       _pickedImage = File(pickedImageFile.path);
     });
     _pop(context);
+
+    // Create a storage reference from our app
+    final storageRef = FirebaseStorage.instance.ref();
+
+// Create a reference to "mountains.jpg"
+    final mountainsRef = storageRef.child(pickedImageFile.path);
+
+// Create a reference to 'images/mountains.jpg'
+    //final mountainImagesRef = storageRef.child("images/mountains.jpg");
+
+    await mountainsRef.putFile(_pickedImage);
+
+    final url2 = await mountainsRef.getDownloadURL();
+
     final ref = FirebaseStorage.instance
         .ref()
         .child('user_image')
@@ -48,13 +62,13 @@ class _PostScreenState extends State<PostScreen> {
 
     final url = await ref.getDownloadURL();
 
-    final userData = await FirebaseFirestore.instance
-        .collection('posts')
-        .doc(user.uid)
-        .get();
+    // final userData = await FirebaseFirestore.instance
+    //     .collection('posts')
+    //     .doc(user.uid)
+    //     .get();
 
     var myData = {
-      'imageURL': url,
+      'imageURL': url2,
       'username': "test",
       'userId': user.uid,
       'description': "test"
